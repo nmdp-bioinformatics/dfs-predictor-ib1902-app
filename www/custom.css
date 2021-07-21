@@ -1,0 +1,63 @@
+#header-bar {
+  font-family: 'Arial';
+  color: #fff; text-align: center;
+  background-color: #63a70a;
+  padding: 20px;
+  font-size: 30px;
+}
+
+#mainlogo {
+    padding-right: 10px;
+    padding-left: 0;
+}
+
+#match.label {
+  font-weight: 500;
+  font-size: 18px;
+  margin-top: 20px;
+}
+
+.add-button {
+  color: white;
+  background-color: #63a70a;
+  margin-bottom: 20px;
+}
+
+.side-bar-header {
+  font-size: 20px;
+  color: #63a70a;
+}
+
+.section-header {
+  color: #63a70a;
+  margin-top: 20px;
+  font-weight: bold;
+  font-size: 18px;
+}
+
+.dt-button {
+  margin-top: 10px;
+}
+
+#tce {
+  padding-top: 3px;
+}
+
+#dnr_cmv {
+  padding-top: 3px;
+}
+
+#rpt_cmv{
+  padding-top: 3px;
+}
+
+p {
+  font-size: 18px;
+}
+
+#plot-footnote {
+    font-size: 14px;
+    margin-left: 80px;
+    margin-top: 10px;
+    margin-bottom: 20px;
+}

@@ -1,5 +1,4 @@
-# dfs-predictor-ib1902-app
-**Haplodonor Selector**
+# Haplodonor Selector
 
 **Disease-Free Survival Predictor Shiny App (IB1902)**
 
@@ -9,19 +8,16 @@
 
 Please, open an issue if you see any problems.
 
-**URL:** http://haplodonorselector.b12x.org/v1.0/
-
-
 
 ## Requirements For Running Locally
 To run, you will need RStudio with R > 4.x and the following libraries:
 
-``` r
+```r
 install.packages(c('shiny', 'DT', 'tibble', 'dplyr', 'plotly', 'shinyjs', 'shinyWidgets'))
 ```
 
 Open an RStudio session in the project directory and run this to start the app locally.
-``` r
+```r
 shiny::runApp()
 ```
 

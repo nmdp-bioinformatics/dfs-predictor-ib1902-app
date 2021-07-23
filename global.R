@@ -8,16 +8,10 @@ library(shinyWidgets)
 
 
 
-# if (Sys.info()['sysname']=='Linux'){
-#   #raw_base <- as_tibble(readRDS("/srv/shiny-server/data/ib1902pred_v2.rds"))
-#   dr_raw_base <- as_tibble(readRDS("/srv/shiny-server/data/ib1902_dr_3yr.rds"))
-#   drdq_raw_base <- as_tibble(readRDS("/srv/shiny-server/data/ib1902_drdq_3yr.rds"))
-#   
-# } else {
-  #raw_base <- as_tibble(readRDS("./data/ib1902pred_v2.rds"))
-  dr_raw_base <- as_tibble(readRDS("data/ib1902_dr_3yr.rds"))
-  drdq_raw_base <- as_tibble(readRDS("data/ib1902_drdq_3yr.rds"))
-# }
+dr_raw_base <- as_tibble(readRDS("data/ib1902_dr_3yr.rds"))
+drdq_raw_base <- as_tibble(readRDS("data/ib1902_drdq_3yr.rds"))
+
+### setting text and url values for intro page
   
 version_text <- "<strong>Version: 1.0</strong>"
 

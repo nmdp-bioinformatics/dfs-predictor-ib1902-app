@@ -1,7 +1,7 @@
 
 shinyServer(function(input, output, session) {
   
-  
+  ## init reactive values
   d <- reactiveValues()
   
   observe({
@@ -12,14 +12,16 @@ shinyServer(function(input, output, session) {
     disableClearButtons(TRUE)
   })
   
+  ## behaviors for when a pair is added
   observeEvent(input$add_pair,{
     d$num_donors <- d$num_donors+1
     processInput()
     d$max_donor <- max(d$data_for_table$`Donor Pair`)
     disablePatientInput(TRUE)
     disableClearButtons(FALSE)
-    
   })
+  
+  ## behaviors for when selected should be cleared
   
   observeEvent(input$clear_selected,{
     
@@ -47,6 +49,8 @@ shinyServer(function(input, output, session) {
     
   })
   
+  ## behaviors for clear all pairs
+  
   observeEvent(input$clear_all,{
     d$data_for_plot <- tibble()
     d$data_for_table <- tibble()
@@ -56,6 +60,8 @@ shinyServer(function(input, output, session) {
     disableClearButtons(TRUE)
   })
 
+  ## toggle function for disabling patient fields
+  
   disablePatientInput <- function(flag){
     
     if(flag){
@@ -77,6 +83,8 @@ shinyServer(function(input, output, session) {
     }
 
   }
+  
+  ## toggle for disabling clear functions
   disableClearButtons <- function(flag){
     
     if(flag){
@@ -91,14 +99,14 @@ shinyServer(function(input, output, session) {
   
   
 
-  ### save this as a tibble to load
-  
+  ### use input to subset the model parameters
   processInput <- reactive({
 
      donor_count <- d$num_donors
     
+    ## each covariate will map filter to value of model data then filter  
+     
     ## disease stage
-
     if(input$disease=='AML'){
       dis_stage_input <- paste0(input$disease,', ',input$dis_stage1)
     } else if(input$disease=='ALL'){
@@ -124,8 +132,6 @@ shinyServer(function(input, output, session) {
       data <- dr_raw_base %>% filter(disstage == disease_stage)
     }
     
-    #=======================
-    # covariates:
     
     ## bleader
     bleader_input <- input$match
@@ -241,6 +247,8 @@ shinyServer(function(input, output, session) {
     up3 <- round(data$ciup[n36],2)
     low3 <- round(data$cilow[n36],2)
     
+    
+    ## build results table
     data2 <- tibble('Donor Pair'= thisDonor,
                     'Donor Label'=thisID,
                     'HLA-B Leader' = bleader_input,
@@ -267,12 +275,7 @@ shinyServer(function(input, output, session) {
   })
   
   
-  #=======================
-  # Plot:
-  
-  
-  #========================
-  # Its output type is a plot
+  ### build output plot
   
   output$plots <- renderPlotly({
 
@@ -282,7 +285,7 @@ shinyServer(function(input, output, session) {
     
     
     plot_data <- d$data_for_plot
-    
+    ## set up  variables
     plot_data$ci_text = paste(round(plot_data$cilow,2), '-', round(plot_data$ciup,2))
     #plot_data$name_text = paste('Pair:', plot_data$'Donor Pair','/',plot_data$'Donor Label')
     plot_data$name_text = plot_data$'Donor Label'
@@ -293,6 +296,7 @@ shinyServer(function(input, output, session) {
                       'rgb(0, 160, 221)','rgb(99, 167, 10)','rgb(138, 138, 141)')
     dp <- unique(plot_data$'Donor Pair')
 
+    ## loop though donors and add each pair to lines
     fig <- plot_ly() 
     for (i in 1:length(dp)){
       subdata <- plot_data %>% filter(`Donor Pair`==dp[i])
@@ -304,6 +308,7 @@ shinyServer(function(input, output, session) {
       fig <- fig %>% add_trace(type = 'scatter', mode = 'lines',data= subdata, x = ~intxrel, y = ~cilow, name = '95% CI',  line = list(color = cibmtr_colors[i], width = 1, dash = 'dot'), hoverinfo="none", legendgroup = ~legend_group, showlegend = FALSE) 
       fig <- fig %>% add_trace(type = 'scatter', mode = 'lines',data= subdata, x = ~intxrel, y = ~ciup, name = '95% CI',  line = list(color = cibmtr_colors[i], width = 1, dash = 'dot'), hoverinfo="none", legendgroup = ~legend_group, showlegend = FALSE) 
     }
+    ## set layout and print plot
     fig <- fig %>% layout(title = list(text="Predicted probability of disease-free survival after haploidentical transplant", 
                                        font=list(size=20)),
                           margin = 10,
@@ -334,6 +339,7 @@ shinyServer(function(input, output, session) {
     fig
   })
   
+  ## set footnote output
   output$plotfootnote <- renderUI({
     if(d$num_donors==0){
       return('')
@@ -343,15 +349,18 @@ shinyServer(function(input, output, session) {
     
   })
 
+  ## create output table
   output$table <- DT::renderDataTable({
     
     if(d$num_donors==0){
       return(NULL)
     }
 
+    ## get table data and set filename with patient label
     df <- d$data_for_table
     file_label <- paste0(gsub(pattern = ' ',replacement = '',input$pat_label),'_DFS_Predictions')
     
+    ## reutrn table with attributes
     DT::datatable(df, 
                   extensions = 'Buttons',
                   options = list(dom = 'tB', 

@@ -6,12 +6,16 @@ shinyUI(
       
     #== App title ----
     titlePanel(title = NULL, windowTitle = "Disease-Free Survival Calculator"),
+    
+    ## create header bar
     h1("A predictor for probability of disease-free survival after haploidentical transplant", 
        id='header-bar'),
     
     navbarPage('Select:',selected = 1,
-               
+    
+    ### introduction page           
     tabPanel('Introduction',value=1,
+             
              shinyjs::useShinyjs(),
              HTML(version_text),
              
@@ -26,6 +30,8 @@ shinyUI(
              HTML(tce_text)
              
     ),
+    
+    ### tool page
     tabPanel('Predictor Tool',value=2,
       
       # Sidebar layout with a input and output definitions
@@ -119,6 +125,8 @@ shinyUI(
         #== Main panel for displaying outputs ----
         
         mainPanel(
+          
+          ### load script to put logo in header and custom css
            includeScript("www/addlogo.js"),
            includeCSS('www/custom.css'),
            HTML(version_text),
